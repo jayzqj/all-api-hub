@@ -124,8 +124,9 @@ describe("registered check-in feedback status routes", () => {
       SITE_TYPES.SUB2API,
       "https://ai-router.dev",
     )
-    expect(routes).toHaveLength(12)
+    expect(routes).toHaveLength(13)
     expect(routes).toContainEqual({ path: "/api/v1/welfare/profile" })
+    expect(routes).toContainEqual({ path: "/api/checkin/status" })
     expect(
       routes.some((route) =>
         route.path.startsWith("/api/v1/user/checkin?timezone="),

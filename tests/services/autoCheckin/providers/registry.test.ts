@@ -6,6 +6,7 @@ import { autoCheckinMethodRegistry } from "~/services/checkin/autoCheckin/provid
 import { aiRouterProvider } from "~/services/checkin/autoCheckin/providers/aiRouter"
 import { anyrouterProvider } from "~/services/checkin/autoCheckin/providers/anyrouter"
 import { baiApiProvider } from "~/services/checkin/autoCheckin/providers/baiApi"
+import { chatflowsAiProvider } from "~/services/checkin/autoCheckin/providers/chatflowsAi"
 import { dayaProvider } from "~/services/checkin/autoCheckin/providers/daya"
 import { denxioProvider } from "~/services/checkin/autoCheckin/providers/denxio"
 import { newApiProvider } from "~/services/checkin/autoCheckin/providers/newApi"
@@ -107,7 +108,7 @@ describe("autoCheckinMethodRegistry", () => {
       }),
     )
 
-    expect(registrationContracts).toHaveLength(25)
+    expect(registrationContracts).toHaveLength(26)
     expect(registrationContracts).toEqual(
       expect.arrayContaining([
         {
@@ -159,6 +160,11 @@ describe("autoCheckinMethodRegistry", () => {
           id: "bai-api:daily-checkin",
           candidateSiteTypes: [SITE_TYPES.SUB2API],
           provider: baiApiProvider,
+        },
+        {
+          id: "chatflowsai:daily-checkin",
+          candidateSiteTypes: [SITE_TYPES.SUB2API],
+          provider: chatflowsAiProvider,
         },
         {
           id: "nexavlinks:daily-checkin",
@@ -400,6 +406,7 @@ describe("autoCheckinMethodRegistry", () => {
       AUTO_CHECKIN_METHOD_IDS.FreeApiDailyCheckIn,
       AUTO_CHECKIN_METHOD_IDS.NexaVlinksDailyCheckIn,
       AUTO_CHECKIN_METHOD_IDS.BaiApiDailyCheckIn,
+      AUTO_CHECKIN_METHOD_IDS.ChatflowsAiDailyCheckIn,
     ])
     expect(
       autoCheckinMethodRegistry

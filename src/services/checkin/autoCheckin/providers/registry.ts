@@ -21,6 +21,7 @@ import {
   createBaiApiCheckInStatusEndpoint,
   resolveBaiApiCheckInTimezone,
 } from "~/services/apiService/sub2api/checkin/baiApiCheckInProtocol"
+import { CHATFLOWS_AI_CHECK_IN_STATUS_ENDPOINT } from "~/services/apiService/sub2api/checkin/chatflowsAiCheckInProtocol"
 import {
   createDaiguaCheckInStatusEndpoint,
   resolveDaiguaCheckInTimezone,
@@ -108,6 +109,7 @@ type CheckInMethodSourceNameKey = `methods.sources.${
   | "clawhud"
   | "freeApi"
   | "baiApi"
+  | "chatflowsAi"
   | "sub2apiPro"
   | "toolcode"
   | "hiyo"
@@ -659,6 +661,24 @@ export const AUTO_CHECKIN_METHOD_DEFINITIONS = {
         path: createBaiApiCheckInStatusEndpoint(resolveBaiApiCheckInTimezone()),
       },
     ],
+    legacy: false,
+    newAccountCompatibility: false,
+  },
+  [AUTO_CHECKIN_METHOD_IDS.ChatflowsAiDailyCheckIn]: {
+    // Console origin and its custom menu's check-in page, public settings
+    // observed 2026-11-18; the hint does not prove support on its own.
+    discoveryOrigins: ["https://ai.chatflowsai.com"],
+    presentation: { sourceNameKey: "methods.sources.chatflowsAi" },
+    id: AUTO_CHECKIN_METHOD_IDS.ChatflowsAiDailyCheckIn,
+    siteTypes: [SITE_TYPES.SUB2API],
+    // A sidecar on the console origin serves `/api/checkin`; other Sub2API
+    // installations answer the Go default 404 and resolve as unsupported.
+    source: {
+      kind: AUTO_CHECKIN_METHOD_SOURCE_KINDS.ThirdParty,
+      sourceName: "ChatflowsAI",
+    },
+    supportsStatusReadback: true,
+    feedbackStatusRoutes: [{ path: CHATFLOWS_AI_CHECK_IN_STATUS_ENDPOINT }],
     legacy: false,
     newAccountCompatibility: false,
   },

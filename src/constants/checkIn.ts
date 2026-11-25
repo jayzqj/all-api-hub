@@ -35,6 +35,7 @@ export const AUTO_CHECKIN_METHOD_IDS = {
   PmApiDailyCheckIn: "pmapi:daily-checkin",
   BaiApiDailyCheckIn: "bai-api:daily-checkin",
   XingyaDailyCheckIn: "xingya:daily-checkin",
+  ChatflowsAiDailyCheckIn: "chatflowsai:daily-checkin",
 } as const
 
 export const CHECK_IN_METHOD_UNKNOWN_REASON_CODES = {

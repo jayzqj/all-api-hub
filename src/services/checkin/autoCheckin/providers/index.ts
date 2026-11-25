@@ -8,6 +8,7 @@ import type { CheckInMethodId } from "~/types/checkIn"
 import { aiRouterProvider } from "./aiRouter"
 import { anyrouterProvider } from "./anyrouter"
 import { baiApiProvider } from "./baiApi"
+import { chatflowsAiProvider } from "./chatflowsAi"
 import { clawhudProvider } from "./clawhud"
 import type { AutoCheckinProvider } from "./contracts"
 import { daiguaProvider } from "./daigua"
@@ -59,6 +60,7 @@ const PROVIDER_BY_METHOD_ID = {
   [AUTO_CHECKIN_METHOD_IDS.PmApiDailyCheckIn]: pmApiProvider,
   [AUTO_CHECKIN_METHOD_IDS.BaiApiDailyCheckIn]: baiApiProvider,
   [AUTO_CHECKIN_METHOD_IDS.XingyaDailyCheckIn]: xingyaProvider,
+  [AUTO_CHECKIN_METHOD_IDS.ChatflowsAiDailyCheckIn]: chatflowsAiProvider,
 } as const satisfies Record<CheckInMethodId, AutoCheckinProvider>
 
 export const autoCheckinMethodRegistry = createAutoCheckinMethodRegistry(

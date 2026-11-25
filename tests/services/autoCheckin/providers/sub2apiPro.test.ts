@@ -10,6 +10,7 @@ import { SITE_TYPES } from "~/constants/siteType"
 import { NATIVE_RESOURCE_MUTATION_CERTAINTIES } from "~/services/apiAdapters/contracts/resourceNative"
 import { SUB2API_AUTH_PERSISTENCE_STATUSES } from "~/services/apiService/sub2api/auth/authSession"
 import { fetchBaiApiCheckInStatus } from "~/services/apiService/sub2api/checkin/baiApiCheckIn"
+import { fetchChatflowsAiCheckInStatus } from "~/services/apiService/sub2api/checkin/chatflowsAiCheckIn"
 import { fetchClawhudDailyCheckInStatus } from "~/services/apiService/sub2api/checkin/clawhudCheckIn"
 import { fetchDaiguaDailyCheckInStatus } from "~/services/apiService/sub2api/checkin/daiguaCheckIn"
 import { fetchDenxioDailyCheckInStatus } from "~/services/apiService/sub2api/checkin/denxioCheckIn"
@@ -42,6 +43,15 @@ import { userCommandExecution } from "~~/tests/services/protectionBypass/fixture
 import { createAutoCheckinMutationLifecycle } from "~~/tests/test-utils/autoCheckin"
 import { buildSiteAccount } from "~~/tests/test-utils/factories"
 
+vi.mock(
+  "~/services/apiService/sub2api/checkin/chatflowsAiCheckIn",
+  async (importOriginal) => ({
+    ...(await importOriginal<
+      typeof import("~/services/apiService/sub2api/checkin/chatflowsAiCheckIn")
+    >()),
+    fetchChatflowsAiCheckInStatus: vi.fn(),
+  }),
+)
 vi.mock(
   "~/services/apiService/sub2api/checkin/baiApiCheckIn",
   async (importOriginal) => ({
@@ -275,6 +285,10 @@ describe("Sub2API Pro daily check-in method Adapter", () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    // This fixture's host does not serve the ChatflowsAI sidecar.
+    vi.mocked(fetchChatflowsAiCheckInStatus).mockRejectedValue(
+      new ApiError("unsupported", 404),
+    )
     // This fixture's host does not serve the daily rewards module.
     vi.mocked(fetchBaiApiCheckInStatus).mockRejectedValue(
       new ApiError("unsupported", 404),

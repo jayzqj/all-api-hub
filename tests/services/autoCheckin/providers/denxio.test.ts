@@ -9,6 +9,7 @@ import { SITE_TYPES } from "~/services/accountSiteDefinitions/identifiers"
 import { NATIVE_RESOURCE_MUTATION_CERTAINTIES } from "~/services/apiAdapters/contracts/resourceNative"
 import { SUB2API_AUTH_PERSISTENCE_STATUSES } from "~/services/apiService/sub2api/auth/authSession"
 import { fetchBaiApiCheckInStatus } from "~/services/apiService/sub2api/checkin/baiApiCheckIn"
+import { fetchChatflowsAiCheckInStatus } from "~/services/apiService/sub2api/checkin/chatflowsAiCheckIn"
 import { fetchClawhudDailyCheckInStatus } from "~/services/apiService/sub2api/checkin/clawhudCheckIn"
 import { fetchDaiguaDailyCheckInStatus } from "~/services/apiService/sub2api/checkin/daiguaCheckIn"
 import {
@@ -57,6 +58,15 @@ vi.mock(
       typeof import("~/services/apiService/sub2api/checkin/xiaobaiCodeCheckIn")
     >()),
     probeXiaobaiCodeCheckInStatus: vi.fn(),
+  }),
+)
+vi.mock(
+  "~/services/apiService/sub2api/checkin/chatflowsAiCheckIn",
+  async (importOriginal) => ({
+    ...(await importOriginal<
+      typeof import("~/services/apiService/sub2api/checkin/chatflowsAiCheckIn")
+    >()),
+    fetchChatflowsAiCheckInStatus: vi.fn(),
   }),
 )
 vi.mock(
@@ -201,6 +211,10 @@ const notCheckedStatus = {
 describe("Denxio daily check-in method Adapter", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // This fixture's host does not serve the ChatflowsAI sidecar.
+    vi.mocked(fetchChatflowsAiCheckInStatus).mockRejectedValue(
+      new ApiError("unsupported", 404),
+    )
     // This fixture's host does not serve the daily rewards module.
     vi.mocked(fetchBaiApiCheckInStatus).mockRejectedValue(
       new ApiError("unsupported", 404),
