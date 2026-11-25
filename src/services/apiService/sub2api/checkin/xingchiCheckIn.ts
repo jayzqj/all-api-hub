@@ -37,7 +37,7 @@ import type {
  * recognized foreign contract here rather than an unknown probe.
  */
 
-export const XINGCHI_CHECK_IN_ALREADY_CLAIMED_REASON = "CHECKIN_ALREADY_CLAIMED"
+const XINGCHI_CHECK_IN_ALREADY_CLAIMED_REASON = "CHECKIN_ALREADY_CLAIMED"
 
 export const XINGCHI_CHECK_IN_RESULT_KINDS = {
   Applied: "applied",
