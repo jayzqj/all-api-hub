@@ -46,6 +46,10 @@ import {
   createUserCheckInStatusEndpoint,
   resolveUserCheckInTimezone,
 } from "~/services/apiService/sub2api/checkin/userCheckInProtocol"
+import {
+  createXingchiCheckInStatusEndpoint,
+  resolveXingchiCheckInTimezone,
+} from "~/services/apiService/sub2api/checkin/xingchiCheckInProtocol"
 import type { CheckInMethodId, PersistedCheckInMethodId } from "~/types/checkIn"
 
 import type { AutoCheckinProvider } from "./contracts"
@@ -110,6 +114,7 @@ type CheckInMethodSourceNameKey = `methods.sources.${
   | "freeApi"
   | "baiApi"
   | "chatflowsAi"
+  | "xingchi"
   | "sub2apiPro"
   | "toolcode"
   | "hiyo"
@@ -679,6 +684,30 @@ export const AUTO_CHECKIN_METHOD_DEFINITIONS = {
     },
     supportsStatusReadback: true,
     feedbackStatusRoutes: [{ path: CHATFLOWS_AI_CHECK_IN_STATUS_ENDPOINT }],
+    legacy: false,
+    newAccountCompatibility: false,
+  },
+  [AUTO_CHECKIN_METHOD_IDS.XingchiDailyCheckIn]: {
+    // Console origin and the api_base_url its public settings advertised on
+    // 2026-11-18; these hints do not prove support on their own.
+    discoveryOrigins: ["https://xingchiapi.com", "https://api.xingchiapi.com"],
+    presentation: { sourceNameKey: "methods.sources.xingchi" },
+    id: AUTO_CHECKIN_METHOD_IDS.XingchiDailyCheckIn,
+    siteTypes: [SITE_TYPES.SUB2API],
+    // Shares FreeAPI's path with a different DTO; the sibling table classifies
+    // each side's DTO as foreign so neither blocks the other's discovery.
+    source: {
+      kind: AUTO_CHECKIN_METHOD_SOURCE_KINDS.ThirdParty,
+      sourceName: "星驰API",
+    },
+    supportsStatusReadback: true,
+    feedbackStatusRoutes: (): FeedbackStatusRoutes => [
+      {
+        path: createXingchiCheckInStatusEndpoint(
+          resolveXingchiCheckInTimezone(),
+        ),
+      },
+    ],
     legacy: false,
     newAccountCompatibility: false,
   },

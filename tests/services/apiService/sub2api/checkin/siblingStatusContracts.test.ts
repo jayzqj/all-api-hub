@@ -26,6 +26,13 @@ const GENIUS_DTO = {
   today_checked_in: false,
   recent_records: [],
 }
+const XINGCHI_DTO = {
+  enabled: true,
+  claimed_today: false,
+  amount: 300,
+  total_count: 0,
+  total_amount: 0,
+}
 
 describe("sibling status DTO discriminators", () => {
   it("declares exactly the methods sharing the user checkin status family", () => {
@@ -35,6 +42,7 @@ describe("sibling status DTO discriminators", () => {
       "clawhud:daily-checkin",
       "freeapi:daily-checkin",
       "genius-programmer:daily-checkin",
+      "xingchi:daily-checkin",
     ])
   })
 
@@ -87,6 +95,27 @@ describe("sibling status DTO discriminators", () => {
       AUTO_CHECKIN_METHOD_IDS.GeniusProgrammerDailyCheckIn,
       CLAWHUD_DTO,
       SIBLING_DTO_VERDICTS.Foreign,
+    ],
+    // 星驰API shares FreeAPI's path but names today's state claimed_today.
+    [
+      AUTO_CHECKIN_METHOD_IDS.XingchiDailyCheckIn,
+      XINGCHI_DTO,
+      SIBLING_DTO_VERDICTS.Own,
+    ],
+    [
+      AUTO_CHECKIN_METHOD_IDS.XingchiDailyCheckIn,
+      FREE_API_DTO,
+      SIBLING_DTO_VERDICTS.Foreign,
+    ],
+    [
+      AUTO_CHECKIN_METHOD_IDS.FreeApiDailyCheckIn,
+      XINGCHI_DTO,
+      SIBLING_DTO_VERDICTS.Foreign,
+    ],
+    [
+      AUTO_CHECKIN_METHOD_IDS.XingchiDailyCheckIn,
+      { enabled: true, checked_in_today: false },
+      SIBLING_DTO_VERDICTS.Unknown,
     ],
     // A payload that carries only the shared checked_in_today names matches
     // neither discriminating fingerprint, so it stays unknown: the table

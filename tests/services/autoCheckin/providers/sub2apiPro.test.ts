@@ -26,6 +26,7 @@ import {
   probeXiaobaiCodeCheckInStatus,
   XIAOBAI_CODE_STATUS_OUTCOMES,
 } from "~/services/apiService/sub2api/checkin/xiaobaiCodeCheckIn"
+import { fetchXingchiCheckInStatus } from "~/services/apiService/sub2api/checkin/xingchiCheckIn"
 import { API_ERROR_CODES, ApiError } from "~/services/apiTransport/errors"
 import { discoverCheckInMethods } from "~/services/checkin/autoCheckin/discovery/discovery"
 import { executeSelectedCheckIn } from "~/services/checkin/autoCheckin/methods"
@@ -43,6 +44,15 @@ import { userCommandExecution } from "~~/tests/services/protectionBypass/fixture
 import { createAutoCheckinMutationLifecycle } from "~~/tests/test-utils/autoCheckin"
 import { buildSiteAccount } from "~~/tests/test-utils/factories"
 
+vi.mock(
+  "~/services/apiService/sub2api/checkin/xingchiCheckIn",
+  async (importOriginal) => ({
+    ...(await importOriginal<
+      typeof import("~/services/apiService/sub2api/checkin/xingchiCheckIn")
+    >()),
+    fetchXingchiCheckInStatus: vi.fn(),
+  }),
+)
 vi.mock(
   "~/services/apiService/sub2api/checkin/chatflowsAiCheckIn",
   async (importOriginal) => ({
@@ -285,6 +295,10 @@ describe("Sub2API Pro daily check-in method Adapter", () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    // This fixture's host does not serve the 星驰API check-in module.
+    vi.mocked(fetchXingchiCheckInStatus).mockRejectedValue(
+      new ApiError("unsupported", 404),
+    )
     // This fixture's host does not serve the ChatflowsAI sidecar.
     vi.mocked(fetchChatflowsAiCheckInStatus).mockRejectedValue(
       new ApiError("unsupported", 404),

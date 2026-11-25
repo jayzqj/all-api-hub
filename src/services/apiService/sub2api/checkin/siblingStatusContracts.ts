@@ -1,6 +1,7 @@
 import { AUTO_CHECKIN_METHOD_IDS } from "~/constants/checkIn"
 import { FREE_API_CHECK_IN_ENDPOINT } from "~/services/apiService/sub2api/checkin/freeApiCheckInProtocol"
 import { USER_CHECK_IN_STATUS_ENDPOINT } from "~/services/apiService/sub2api/checkin/userCheckInProtocol"
+import { XINGCHI_CHECK_IN_ENDPOINT } from "~/services/apiService/sub2api/checkin/xingchiCheckInProtocol"
 import type { CheckInMethodId } from "~/types/checkIn"
 
 /**
@@ -82,6 +83,21 @@ export const SIBLING_STATUS_DTO_DISCRIMINATORS = [
       typeof data.today_checked_in === "boolean" &&
       Array.isArray(data.recent_records),
     siblingDtoSample: { enabled: true, checked_in_today: false },
+  },
+  {
+    // 星驰API shares FreeAPI's read/claim path but names today's state
+    // `claimed_today`, which no sibling DTO carries.
+    methodId: AUTO_CHECKIN_METHOD_IDS.XingchiDailyCheckIn,
+    endpoint: XINGCHI_CHECK_IN_ENDPOINT,
+    ownDtoMatches: (data) =>
+      typeof data.enabled === "boolean" &&
+      typeof data.claimed_today === "boolean",
+    siblingDtoSample: {
+      enabled: true,
+      checked_in_today: false,
+      min_amount: 1,
+      max_amount: 999,
+    },
   },
 ] as const satisfies readonly SiblingStatusDtoDiscriminator[]
 

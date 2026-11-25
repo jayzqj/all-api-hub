@@ -31,6 +31,7 @@ import { veloeraProvider } from "./veloera"
 import { wongGongyiProvider } from "./wong"
 import { xiaobaiCodeProvider } from "./xiaobaiCode"
 import { xiaoenProvider } from "./xiaoen"
+import { xingchiProvider } from "./xingchi"
 import { xingyaProvider } from "./xingya"
 
 const PROVIDER_BY_METHOD_ID = {
@@ -61,6 +62,7 @@ const PROVIDER_BY_METHOD_ID = {
   [AUTO_CHECKIN_METHOD_IDS.BaiApiDailyCheckIn]: baiApiProvider,
   [AUTO_CHECKIN_METHOD_IDS.XingyaDailyCheckIn]: xingyaProvider,
   [AUTO_CHECKIN_METHOD_IDS.ChatflowsAiDailyCheckIn]: chatflowsAiProvider,
+  [AUTO_CHECKIN_METHOD_IDS.XingchiDailyCheckIn]: xingchiProvider,
 } as const satisfies Record<CheckInMethodId, AutoCheckinProvider>
 
 export const autoCheckinMethodRegistry = createAutoCheckinMethodRegistry(

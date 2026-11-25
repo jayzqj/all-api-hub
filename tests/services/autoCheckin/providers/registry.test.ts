@@ -34,6 +34,7 @@ import { veloeraProvider } from "~/services/checkin/autoCheckin/providers/veloer
 import { voApiV2Provider } from "~/services/checkin/autoCheckin/providers/voapiV2"
 import { wongGongyiProvider } from "~/services/checkin/autoCheckin/providers/wong"
 import { xiaobaiCodeProvider } from "~/services/checkin/autoCheckin/providers/xiaobaiCode"
+import { xingchiProvider } from "~/services/checkin/autoCheckin/providers/xingchi"
 import { xingyaProvider } from "~/services/checkin/autoCheckin/providers/xingya"
 import type { CheckInMethodId } from "~/types/checkIn"
 
@@ -108,7 +109,7 @@ describe("autoCheckinMethodRegistry", () => {
       }),
     )
 
-    expect(registrationContracts).toHaveLength(26)
+    expect(registrationContracts).toHaveLength(27)
     expect(registrationContracts).toEqual(
       expect.arrayContaining([
         {
@@ -165,6 +166,11 @@ describe("autoCheckinMethodRegistry", () => {
           id: "chatflowsai:daily-checkin",
           candidateSiteTypes: [SITE_TYPES.SUB2API],
           provider: chatflowsAiProvider,
+        },
+        {
+          id: "xingchi:daily-checkin",
+          candidateSiteTypes: [SITE_TYPES.SUB2API],
+          provider: xingchiProvider,
         },
         {
           id: "nexavlinks:daily-checkin",
@@ -407,6 +413,7 @@ describe("autoCheckinMethodRegistry", () => {
       AUTO_CHECKIN_METHOD_IDS.NexaVlinksDailyCheckIn,
       AUTO_CHECKIN_METHOD_IDS.BaiApiDailyCheckIn,
       AUTO_CHECKIN_METHOD_IDS.ChatflowsAiDailyCheckIn,
+      AUTO_CHECKIN_METHOD_IDS.XingchiDailyCheckIn,
     ])
     expect(
       autoCheckinMethodRegistry
